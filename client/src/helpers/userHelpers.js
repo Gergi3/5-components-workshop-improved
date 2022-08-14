@@ -3,7 +3,6 @@ export const getFullName = (user) => `${user.firstName} ${user.lastName}`
 export const getFullAddress = (user) => `${user.address.country}, ${user.address.city}, ${user.address.street}, ${user.address.streetNumber}`
 
 export const getFormattedDate = (stringDate) => {
-    console.log(stringDate);
     const date = new Date(stringDate)
     const year = date.getFullYear();
     const day = date.getDate();

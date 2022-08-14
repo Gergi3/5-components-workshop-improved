@@ -21,42 +21,22 @@ export const UsersList = ({
     }, []);
 
     const userActionHandler = (_id, action) => {
+        if (_id === null) {
+            return setUserAction({ user: null, action })
+        }
         userServices.getOneById(_id)
-            .then(user => {
-                setUserAction({ user, action });
-            });
+            .then(user => setUserAction({ user, action }));
     }
 
-    const clearHandler = () => {
+    const closeHandler = () => {
         setUserAction(userActionDefault);
     }
 
-    const createUserHandler = (e) => {
-        e.preventDefault();
-        
-        const formData = new FormData(e.currentTarget);
-        const {
-            firstName,
-            lastName,
-            email,
-            phoneNumber,
-            imageUrl,
-            ...address
-        } = Object.fromEntries(formData);
-
-        const data = {
-            firstName,
-            lastName,
-            email,
-            phoneNumber,
-            imageUrl,
-            address
-        }
-
-        console.log(data);
-        userServices.create(data)
+    const userCreateHandler = (userData) => {
+        userServices.create(userData)
             .then(res => {
-                setUsers(oldUsers => [...oldUsers, res])
+                setUsers(oldUsers => [...oldUsers, res]);
+                closeHandler();
             });
     }
 
@@ -64,34 +44,34 @@ export const UsersList = ({
         <>
             {userAction.action &&
                 <div className="overlay">
-                    <div className="backdrop" onClick={clearHandler}></div>
+                    <div className="backdrop" onClick={closeHandler}></div>
                     <div className="modal">
                         {userAction.action === UserActionTypes.Create &&
                             <UserCreate
                                 user={userAction.user} 
-                                clearHandler={clearHandler}
-                                onSubmit={createUserHandler}
+                                closeHandler={closeHandler}
+                                userCreateHandler={userCreateHandler}
                             />
                         }
 
                         {userAction.action === UserActionTypes.Details &&
                             <UserDetails
                                 user={userAction.user} 
-                                clearHandler={clearHandler}
+                                closeHandler={closeHandler}
                             />
                         }
 
                         {userAction.action === UserActionTypes.Edit &&
                             <UserDetails
                                 user={userAction.user} 
-                                clearHandler={clearHandler}
+                                closeHandler={closeHandler}
                             />
                         }
 
                         {userAction.action === UserActionTypes.Delete &&
                             <UserDetails
                                 user={userAction.user}
-                                clearHandler={clearHandler}
+                                closeHandler={closeHandler}
                             />
                         }
                     </div>

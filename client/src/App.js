@@ -3,7 +3,6 @@ import { Footer } from './components/shared/footer/Footer';
 import { Header } from './components/shared/header/Header';
 import { UsersList } from './components/user-list/UserList';
 import './App.css';
-import { useState } from 'react';
 
 function App() {
     return (

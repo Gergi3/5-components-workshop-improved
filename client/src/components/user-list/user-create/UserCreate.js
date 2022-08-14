@@ -1,15 +1,54 @@
+import { useState } from 'react';
+
+import * as userServices from '../../../services/userServices'
+
+import { UserInput } from './user-input/UserInput';
 import './UserCreate.css'
 
 export const UserCreate = ({
     user,
-    clearHandler,
-    onSubmit
+    closeHandler,
+    userCreateHandler
 }) => {
+    const [values, setValues] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        imageUrl: '',
+        country: '',
+        city: '',
+        street: '',
+        streetNumber: ''
+    });
+
+    const formStateHandler = (e) => {
+        setValues(state => ({
+            ...state,
+            [e.target.name]: e.target.value,
+        }));
+    }
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+        
+        const { country, city, street, streetNumber, ...userData} = values;
+        userData.address = { country, city, street, streetNumber };
+
+        userCreateHandler(userData);
+    }
+
+    const saveDisableHandler = (e) => {
+        userServices.isValidUser(values)
+            ? e.currentTarget.disabled = false
+            : e.currentTarget.disabled = true;
+    }
+
     return (
         <div className="user-container">
             <header className="headers">
                 <h2>Edit User/Add User</h2>
-                <button className="btn close" onClick={clearHandler}>
+                <button className="btn close" onClick={closeHandler}>
                     <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark"
                         className="svg-inline--fa fa-xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                         <path fill="currentColor"
@@ -18,106 +57,88 @@ export const UserCreate = ({
                     </svg>
                 </button>
             </header>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={submitHandler}>
                 <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="firstName">First name</label>
-                        <div className="input-wrapper">
-                            <span><i className="fa-solid fa-user"></i></span>
-                            <input id="firstName" name="firstName" type="text" />
-                        </div>
-                        <p className="form-error">
-                            First name should be at least 3 characters long!
-                        </p>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="lastName">Last name</label>
-                        <div className="input-wrapper">
-                            <span><i className="fa-solid fa-user"></i></span>
-                            <input id="lastName" name="lastName" type="text" />
-                        </div>
-                        <p className="form-error">
-                            Last name should be at least 3 characters long!
-                        </p>
-                    </div>
+                    <UserInput
+                        text="First name"
+                        name="firstName"
+                        value={values.firstName}
+                        onChange={formStateHandler}
+                        icon="fa-user"
+                    />
+
+                    <UserInput
+                        text="Last name"
+                        name="lastName"
+                        value={values.lastName}
+                        onChange={formStateHandler}
+                        icon="fa-user"
+                    />
                 </div>
 
                 <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <div className="input-wrapper">
-                            <span><i className="fa-solid fa-envelope"></i></span>
-                            <input id="email" name="email" type="text" />
-                        </div>
-                        <p className="form-error">Email is not valid!</p>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="phoneNumber">Phone number</label>
-                        <div className="input-wrapper">
-                            <span><i className="fa-solid fa-phone"></i></span>
-                            <input id="phoneNumber" name="phoneNumber" type="text" />
-                        </div>
-                        <p className="form-error">Phone number is not valid!</p>
-                    </div>
+                    <UserInput
+                        text="Email"
+                        name="email"
+                        value={values.email}
+                        onChange={formStateHandler}
+                        icon="fa-envelope"
+                    />
+                    <UserInput
+                        text="Phone number"
+                        name="phoneNumber"
+                        value={values.phoneNumber}
+                        onChange={formStateHandler}
+                        icon="fa-phone"
+                    />
                 </div>
 
-                <div className="form-group long-line">
-                    <label htmlFor="imageUrl">Image Url</label>
-                    <div className="input-wrapper">
-                        <span><i className="fa-solid fa-image"></i></span>
-                        <input id="imageUrl" name="imageUrl" type="text" />
-                    </div>
-                    <p className="form-error">ImageUrl is not valid!</p>
+                <UserInput
+                    text="Image URL"
+                    name="imageUrl"
+                    value={values.imageUrl}
+                    onChange={formStateHandler}
+                    className="long-line"
+                    icon="fa-image"
+                />
+
+                <div className="form-row">
+                    <UserInput
+                        text="Country"
+                        name="country"
+                        value={values.country}
+                        onChange={formStateHandler}
+                        icon="fa-map"
+                    />
+                    <UserInput
+                        text="City"
+                        name="city"
+                        value={values.city}
+                        onChange={formStateHandler}
+                        icon="fa-city"
+                    />
                 </div>
 
                 <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="country">Country</label>
-                        <div className="input-wrapper">
-                            <span><i className="fa-solid fa-map"></i></span>
-                            <input id="country" name="country" type="text" />
-                        </div>
-                        <p className="form-error">
-                            Country should be at least 2 characters long!
-                        </p>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="city">City</label>
-                        <div className="input-wrapper">
-                            <span><i className="fa-solid fa-city"></i></span>
-                            <input id="city" name="city" type="text" />
-                        </div>
-                        <p className="form-error">
-                            City should be at least 3 characters long!
-                        </p>
-                    </div>
+                    <UserInput
+                        text="Street"
+                        name="street"
+                        value={values.street}
+                        onChange={formStateHandler}
+                        icon="fa-map"
+                    />
+                    <UserInput
+                        text="Street number"
+                        name="streetNumber"
+                        value={values.streetNumber}
+                        onChange={formStateHandler}
+                        icon="fa-house-chimney"
+                    />
                 </div>
 
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="street">Street</label>
-                        <div className="input-wrapper">
-                            <span><i className="fa-solid fa-map"></i></span>
-                            <input id="street" name="street" type="text" />
-                        </div>
-                        <p className="form-error">
-                            Street should be at least 3 characters long!
-                        </p>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="streetNumber">Street number</label>
-                        <div className="input-wrapper">
-                            <span><i className="fa-solid fa-house-chimney"></i></span>
-                            <input id="streetNumber" name="streetNumber" type="text" />
-                        </div>
-                        <p className="form-error">
-                            Street number should be a positive number!
-                        </p>
-                    </div>
-                </div>
                 <div id="form-actions">
-                    <button id="action-save" className="btn" type="submit">Save</button>
-                    <button id="action-cancel" className="btn" type="button" onClick={clearHandler}>Cancel</button>
+                    <button id="action-save" className="btn" type="submit" onMouseEnter={saveDisableHandler}>Save</button>
+                    <button id="action-cancel" className="btn" type="button" onClick={closeHandler}>Cancel</button>
                 </div>
             </form>
         </div>
