@@ -1,4 +1,5 @@
 import './App.css';
+import { Search } from './components/search/Search';
 import { Footer } from './components/shared/footer/Footer';
 import { Header } from './components/shared/header/Header';
 
@@ -6,7 +7,15 @@ function App() {
     return (
         <div>
             <Header />
+            
+            <main className="main">
+                <section className="card users-container">
+                    <Search />
 
+                    
+                </section>
+            </main>
+            
             <Footer />
         </div>
     );
