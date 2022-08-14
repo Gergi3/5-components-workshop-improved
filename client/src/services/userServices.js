@@ -6,3 +6,10 @@ export const getAll = () => {
         .then(res => res.users)
         .catch(err => console.error(err));
 }
+
+export const getOneById = (id) => {
+    return fetch(baseUrl + '/' + id)
+        .then(res => res.json())
+        .then(res => res.user)
+        .catch(err => console.error(err));
+};

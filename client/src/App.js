@@ -1,8 +1,8 @@
-import './App.css';
 import { Search } from './components/search/Search';
 import { Footer } from './components/shared/footer/Footer';
 import { Header } from './components/shared/header/Header';
 import { UsersList } from './components/user-list/UserList';
+import './App.css';
 
 function App() {
     return (

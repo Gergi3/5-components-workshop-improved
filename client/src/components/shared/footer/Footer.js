@@ -1,8 +1,8 @@
-import styles from './Footer.module.css'
+import './Footer.css'
 
 export const Footer = (params) => {
     return (
-        <footer className={styles.footer}>
+        <footer className="footer">
             <p>Copyright © designed by Mihail Valkov</p>
         </footer>
     );
