@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import * as userServices from '../../../services/userServices'
 
@@ -8,7 +8,7 @@ import './UserCreate.css'
 export const UserCreate = ({
     user,
     closeHandler,
-    userCreateHandler
+    userDataHandler
 }) => {
     const [values, setValues] = useState({
         firstName: '',
@@ -21,6 +21,14 @@ export const UserCreate = ({
         street: '',
         streetNumber: ''
     });
+
+    useEffect(() => {
+        if (user) {
+            const {address: {country, city, street, streetNumber}, _id, updatedAt, createdAt, ...userData } = user
+            const obj = {country, city, street, streetNumber, ...userData};
+            setValues(obj);
+        }
+    }, []);
 
     const formStateHandler = (e) => {
         setValues(state => ({
@@ -35,13 +43,7 @@ export const UserCreate = ({
         const { country, city, street, streetNumber, ...userData} = values;
         userData.address = { country, city, street, streetNumber };
 
-        userCreateHandler(userData);
-    }
-
-    const saveDisableHandler = (e) => {
-        userServices.isValidUser(values)
-            ? e.currentTarget.disabled = false
-            : e.currentTarget.disabled = true;
+        userDataHandler(userData, user?._id);
     }
 
     return (
@@ -137,7 +139,7 @@ export const UserCreate = ({
                 </div>
 
                 <div id="form-actions">
-                    <button id="action-save" className="btn" type="submit" onMouseEnter={saveDisableHandler}>Save</button>
+                    <button id="action-save" className="btn" type="submit" disabled={!userServices.isValidUser(values)}>Save</button>
                     <button id="action-cancel" className="btn" type="button" onClick={closeHandler}>Cancel</button>
                 </div>
             </form>

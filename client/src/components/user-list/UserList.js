@@ -40,6 +40,14 @@ export const UsersList = ({
             });
     }
 
+    const userEditHandler = (userData, id) => {
+        userServices.editById(id, userData)
+            .then(res => {
+                setUsers(oldUsers => oldUsers.map(x => x._id == id ? res : x));
+                closeHandler();
+            });
+    }
+
     return (
         <>
             {userAction.action &&
@@ -48,9 +56,8 @@ export const UsersList = ({
                     <div className="modal">
                         {userAction.action === UserActionTypes.Create &&
                             <UserCreate
-                                user={userAction.user} 
                                 closeHandler={closeHandler}
-                                userCreateHandler={userCreateHandler}
+                                userDataHandler={userCreateHandler}
                             />
                         }
 
@@ -62,9 +69,10 @@ export const UsersList = ({
                         }
 
                         {userAction.action === UserActionTypes.Edit &&
-                            <UserDetails
+                            <UserCreate
                                 user={userAction.user} 
                                 closeHandler={closeHandler}
+                                userDataHandler={userEditHandler}
                             />
                         }
 

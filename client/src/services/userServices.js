@@ -25,20 +25,34 @@ export const create = (data) => {
 
     return fetch(baseUrl, options)
         .then(res => res.json())
-        .then(res => 
-            {
-                console.log(res);
-                return res.user})
+        .then(res => res.user)
         .catch(err => console.error(err));
 };
 
+export const editById = (id, data) => {
+    const options = {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+
+    return fetch(`${baseUrl}/${id}`, options)
+        .then(res => res.json())
+        .then(res => res.user)
+        .catch(err => console.error(err));
+}
+
 export const isValidUser = (data) => {
+    let isValid = true
     Object.entries(data).forEach(([key, value]) => {
         const errorMessage = validateUserField(key, value);
         if (errorMessage) {
-            return false;
+            return isValid = false;
         }
     });
+    return isValid;
 }
 
 export const validateUserField = (key, value) => {
@@ -47,7 +61,6 @@ export const validateUserField = (key, value) => {
         value?.length < validator.min ||
         (validator.regex && !validator.regex?.test(value)) ||
         (validator.positive && (value <= 0 || isNaN(value)));
-
     if (value === '') {
         return 'required';
     }
