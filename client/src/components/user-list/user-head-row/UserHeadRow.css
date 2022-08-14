@@ -1,0 +1,40 @@
+.table thead {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  background: white;
+  z-index: 1;
+}
+.table thead tr {
+  background-color: #2a87a5;
+  color: white;
+}
+.table th {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: left;
+  padding: 8px;
+  text-align: center;
+}
+
+.table th:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.icon {
+  height: 13px;
+}
+
+.table th:hover .icon {
+  opacity: 1;
+}
+
+.table th .icon {
+  margin-left: 10px;
+  opacity: 0;
+}
+
+.table th .active-icon {
+  opacity: 1;
+}
